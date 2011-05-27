@@ -1,0 +1,144 @@
+switch (bot.last_direction) {
+// First move
+  case 0:
+    // Move to the right
+    if (map.map[bot.posY][bot.posX + 1] != 'x') {
+      bot.posX++;
+      bot.last_direction = RIGHT;
+    }
+    // Move to bottom
+    else if (map.map[bot.posY + 1][bot.posX] != 'x') {
+      bot.posY++;
+      bot.last_direction = BOTTOM;
+    }
+    // Move to the left
+    else if (map.map[bot.posY][bot.posX - 1] != 'x') {
+      bot.posX--;
+      bot.last_direction = LEFT;
+    }
+    // Move to the top
+    else if (map.map[bot.posY - 1][bot.posX] != 'x') {
+      bot.posY--;
+      bot.last_direction = TOP;
+    }
+    else {
+      // What the fuck?! We're stuck!
+    }
+    break;
+    
+  // Last move was to the right
+  case RIGHT:
+    // Move to the right
+    if (map.map[bot.posY][bot.posX + 1] != 'x') {
+      bot.posX++;
+      bot.last_direction = RIGHT;
+    }
+    // Move to bottom
+    else if (map.map[bot.posY + 1][bot.posX] != 'x') {
+      bot.posY++;
+      bot.last_direction = BOTTOM;
+    }
+    // Move to the left
+    else if (map.map[bot.posY][bot.posX - 1] != 'x') {
+      bot.posX--;
+      bot.last_direction = LEFT;
+    }
+    // Move to the top
+    else if (map.map[bot.posY - 1][bot.posX] != 'x') {
+      bot.posY--;
+      bot.last_direction = TOP;
+    }
+    else {
+      // What the fuck?! We're stuck!
+    }
+    break;
+    
+  // Last move was to the bottom
+  case BOTTOM:
+    // Move to bottom
+    if (map.map[bot.posY + 1][bot.posX] != 'x') {
+      bot.posY++;
+      bot.last_direction = BOTTOM;
+    }
+    // Move to the left
+    else if (map.map[bot.posY][bot.posX - 1] != 'x') {
+      bot.posX--;
+      bot.last_direction = LEFT;
+    }
+    // Move to the top
+    else if (map.map[bot.posY - 1][bot.posX] != 'x') {
+      bot.posY--;
+      bot.last_direction = TOP;
+    }
+    else // Move to the right
+    if (map.map[bot.posY][bot.posX + 1] != 'x') {
+      bot.posX++;
+      bot.last_direction = RIGHT;
+    }
+    else {
+      // What the fuck?! We're stuck!
+    }
+    break;
+    
+  // Last move was to the left
+  case LEFT:
+    // Move to the left
+    if (map.map[bot.posY][bot.posX - 1] != 'x') {
+      // Check if we can go bottom (for fun)
+      if (map.map[bot.posY + 1][bot.posX] != 'x') {
+        bot.posY++;
+        bot.last_direction = BOTTOM;
+      }
+      else {
+        bot.posX--;
+        bot.last_direction = LEFT;
+      }
+    }
+    // Move to the top
+    else if (map.map[bot.posY - 1][bot.posX] != 'x') {
+      bot.posY--;
+      bot.last_direction = TOP;
+    }
+    // Move to the right
+    else if (map.map[bot.posY][bot.posX + 1] != 'x') {
+      bot.posX++;
+      bot.last_direction = RIGHT;
+    }
+    // Move to bottom
+    else if (map.map[bot.posY + 1][bot.posX] != 'x') {
+      bot.posY++;
+      bot.last_direction = BOTTOM;
+    }
+    else {
+      // What the fuck?! We're stuck!
+    }
+    break;
+    
+  // Last move was to the top
+  case TOP:
+    // Move to the top
+    if (map.map[bot.posY - 1][bot.posX] != 'x') {
+      bot.posY--;
+      bot.last_direction = TOP;
+    }
+    // Move to the right
+    else if (map.map[bot.posY][bot.posX + 1] != 'x') {
+      bot.posX++;
+      bot.last_direction = RIGHT;
+    }
+    // Move to bottom
+    else if (map.map[bot.posY + 1][bot.posX] != 'x') {
+      bot.posY++;
+      bot.last_direction = BOTTOM;
+    }
+    // Move to the left
+    else if (map.map[bot.posY][bot.posX - 1] != 'x') {
+      bot.posX--;
+      bot.last_direction = LEFT;
+    }
+    else {
+      // What the fuck?! We're stuck!
+    }
+    break;
+  
+  }
