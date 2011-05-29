@@ -41,35 +41,24 @@ Robot move_robot(Map map, Robot bot, Exit exit) {
   
   // Top
   if (map.map[bot.posY - bot.speed][bot.posX] != 'x' 
-  && bot.m[bot.posY - bot.speed][bot.posX] != 1) availableMoves[TOP] = 1;
+  && bot.m[bot.posY - bot.speed][bot.posX] != 1
+  && !will_be_stuck(map, bot, TOP)) availableMoves[TOP] = 1;
   // Right
   if (map.map[bot.posY][bot.posX + bot.speed] != 'x'
-  && bot.m[bot.posY][bot.posX + bot.speed] != 1) availableMoves[RIGHT] = 1;
+  && bot.m[bot.posY][bot.posX + bot.speed] != 1
+  && !will_be_stuck(map, bot, RIGHT)) availableMoves[RIGHT] = 1;
   // Bottom
   if (map.map[bot.posY + bot.speed][bot.posX] != 'x' 
-  && bot.m[bot.posY + bot.speed][bot.posX] != 1) availableMoves[BOTTOM] = 1;
+  && bot.m[bot.posY + bot.speed][bot.posX] != 1
+  && !will_be_stuck(map, bot, BOTTOM)) availableMoves[BOTTOM] = 1;
   // Left
   if (map.map[bot.posY][bot.posX - bot.speed] != 'x'
-  && bot.m[bot.posY][bot.posX - bot.speed] != 1) availableMoves[LEFT] = 1;
+  && bot.m[bot.posY][bot.posX - bot.speed] != 1
+  && !will_be_stuck(map, bot, LEFT)) availableMoves[LEFT] = 1;
   
   // Now chosing the best move...
   
   // Starting by the directions where we should go
-  if (availableMoves[verticalMove] == 1) {
-  
-    switch (verticalMove) {
-      case TOP:
-        bot.posY--;
-        bot.last_direction = TOP;
-        break;
-      case BOTTOM:
-        bot.posY++;
-        bot.last_direction = BOTTOM;
-        break;
-    }
-  
-  }
-  
   if (availableMoves[horizontalMove] == 1) {
   
     switch (horizontalMove) {
@@ -83,14 +72,29 @@ Robot move_robot(Map map, Robot bot, Exit exit) {
     }
   
   }
+  else if (availableMoves[verticalMove] == 1) {
+  
+    switch (verticalMove) {
+      case TOP:
+        bot.posY--;
+        bot.last_direction = TOP;
+        break;
+      case BOTTOM:
+        bot.posY++;
+        bot.last_direction = BOTTOM;
+        break;
+    }
+  
+  }
+   
   // Doing it randomly
   else {
   
     int randomMove = 0, search = 1;
   
+    // Searching for a good move...
     while (search) {
       
-    	// Searching for a good move...
       randomMove = (rand() % 4);
       switch (randomMove) {
         case TOP:
@@ -145,4 +149,72 @@ Robot move_robot(Map map, Robot bot, Exit exit) {
   
   return bot;
 
+}
+
+int will_be_stuck(Map map, Robot bot, int direction) {
+	
+	int stuck = 0;
+	
+	switch (direction) {
+		
+		case TOP:
+			if ((map.map[bot.posY - bot.speed - 1][bot.posX] == 'x' || bot.m[bot.posY - bot.speed - 1][bot.posX] == 1) &&
+			(map.map[bot.posY - bot.speed][bot.posX - bot.speed] == 'x' || bot.m[bot.posY - bot.speed][bot.posX - bot.speed] == 1) &&
+			(map.map[bot.posY - bot.speed][bot.posX + bot.speed] == 'x' || bot.m[bot.posY - bot.speed][bot.posX + bot.speed] == 1)) stuck = 1;
+			break;
+			
+		case RIGHT:
+			if ((map.map[bot.posY][bot.posX + bot.speed + 1] == 'x' || bot.m[bot.posY][bot.posX + bot.speed + 1] == 1) &&
+			(map.map[bot.posY - 1][bot.posX + bot.speed] == 'x' || bot.m[bot.posY - 1][bot.posX + bot.speed] == 1) &&
+			(map.map[bot.posY + 1][bot.posX + bot.speed] == 'x' || bot.m[bot.posY + 1][bot.posX + bot.speed] == 1)) stuck = 1;
+			break;
+			
+		case BOTTOM:
+			if ((map.map[bot.posY + bot.speed + 1][bot.posX] == 'x' || bot.m[bot.posY + bot.speed + 1][bot.posX] == 1) &&
+			(map.map[bot.posY + bot.speed][bot.posX - bot.speed] == 'x' || bot.m[bot.posY + bot.speed][bot.posX - bot.speed] == 1) &&
+			(map.map[bot.posY + bot.speed][bot.posX + bot.speed] == 'x' || bot.m[bot.posY + bot.speed][bot.posX + bot.speed] == 1)) stuck = 1;
+			break;
+			
+		case LEFT:
+			if ((map.map[bot.posY][bot.posX - bot.speed - 1] == 'x' || bot.m[bot.posY][bot.posX - bot.speed - 1] == 1) &&
+			(map.map[bot.posY - 1][bot.posX - bot.speed] == 'x' || bot.m[bot.posY - 1][bot.posX - bot.speed] == 1) &&
+			(map.map[bot.posY + 1][bot.posX - bot.speed] == 'x' || bot.m[bot.posY + 1][bot.posX - bot.speed] == 1)) stuck = 1;
+			break;
+		
+	}
+	
+	return stuck;
+	
+}
+
+int is_corridor(Map map, Robot bot, int direction) {
+	
+	int corridor = 0;
+	
+	switch (direction) {
+		
+		case TOP:
+			if ((map.map[bot.posY - bot.speed][bot.posX - bot.speed] == 'x' || bot.m[bot.posY - bot.speed][bot.posX - bot.speed] == 1) &&
+			(map.map[bot.posY - bot.speed][bot.posX + bot.speed] == 'x' || bot.m[bot.posY - bot.speed][bot.posX + bot.speed] == 1)) corridor = 1;
+			break;
+			
+		case RIGHT:
+			if ((map.map[bot.posY - 1][bot.posX + bot.speed] == 'x' || bot.m[bot.posY - 1][bot.posX + bot.speed] == 1) &&
+			(map.map[bot.posY + 1][bot.posX + bot.speed] == 'x' || bot.m[bot.posY + 1][bot.posX + bot.speed] == 1)) corridor = 1;
+			break;
+			
+		case BOTTOM:
+			if ((map.map[bot.posY + bot.speed][bot.posX - bot.speed] == 'x' || bot.m[bot.posY + bot.speed][bot.posX - bot.speed] == 1) &&
+			(map.map[bot.posY + bot.speed][bot.posX + bot.speed] == 'x' || bot.m[bot.posY + bot.speed][bot.posX + bot.speed] == 1)) corridor = 1;
+			break;
+			
+		case LEFT:
+			if ((map.map[bot.posY - 1][bot.posX - bot.speed] == 'x' || bot.m[bot.posY - 1][bot.posX - bot.speed] == 1) &&
+			(map.map[bot.posY + 1][bot.posX - bot.speed] == 'x' || bot.m[bot.posY + 1][bot.posX - bot.speed] == 1)) corridor = 1;
+			break;
+		
+	}
+	
+	return corridor;
+	
 }
