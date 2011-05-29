@@ -40,8 +40,14 @@ void show_map(Map map, Robot bot) {
       if (bot.posY == i && bot.posX == j) {
        printf("%c", bot.name); 
       }
-      else {
+      else if (map.map[i][j] == 'x' || map.map[i][j] == 'S') {
         printf("%c", map.map[i][j]);
+      }
+      else if (bot.m[i][j] == 1) {
+        printf("*");
+      }
+      else {
+      printf(" ");
       }
     
     }

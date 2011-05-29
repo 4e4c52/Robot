@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include "headers/constants.h"
 #include "headers/map.h"
 #include "headers/robot.h"
@@ -12,6 +13,9 @@ int main(int argc, char* argv[]) {
   Map map;
   Robot bot;
   Exit exit;
+  
+  /* Initializing the random generator */
+  srand(time(NULL));
   
   //printf("\n%dx%d\n", exit.y, exit.x);
   
@@ -28,7 +32,7 @@ int main(int argc, char* argv[]) {
   /* Moving the bot! */
   while (bot.out == 0) {
   
-    SDL_Delay(100);
+    SDL_Delay(50);
     bot = move_robot(map, bot, exit);
     show_map(map, bot);
     

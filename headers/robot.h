@@ -13,6 +13,8 @@ struct Robot {
   int speed;
   int direction; 
   int last_direction;
+  int dont_go;
+  char m[MAP_HEIGHT][MAP_WIDTH];
   int out;
   
 };
