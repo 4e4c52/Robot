@@ -128,13 +128,13 @@ Robot move_robot(Map map, Robot bot, Exit exit) {
           && bot.m[bot.posY - bot.speed][bot.posX] != 1
           && !will_be_stuck(map, bot, TOP)
           //&& !is_corridor(map, bot, TOP)
-          ) search = 0;
+          ) { search = 0; printf("\nRandom move: TOP\n"), fflush(stdout); }
           else if (
           map.map[bot.posY - bot.speed][bot.posX] != 'x' 
           && bot.is_stuck == 1
           //&& !will_be_stuck(map, bot, TOP)
           //&& !is_corridor(map, bot, TOP)
-          ) search = 0;
+          ) { search = 0; printf("\nRandom move: TOP\n"), fflush(stdout); }
           break;
         case RIGHT:
           if (
@@ -142,13 +142,13 @@ Robot move_robot(Map map, Robot bot, Exit exit) {
           && bot.m[bot.posY][bot.posX + bot.speed] != 1
           && !will_be_stuck(map, bot, RIGHT)
           //&& !is_corridor(map, bot, RIGHT)
-          ) search = 0;
+          ) { search = 0; printf("\nRandom move: RIGHT\n"), fflush(stdout); }
           else if (
           map.map[bot.posY][bot.posX + bot.speed] != 'x' 
           && bot.is_stuck == 1
           //&& !will_be_stuck(map, bot, RIGHT)
           //&& !is_corridor(map, bot, RIGHT)
-          ) search = 0;
+          ) { search = 0; printf("\nRandom move: RIGHT\n"), fflush(stdout); }
           break;
         case BOTTOM:
           if (
@@ -156,21 +156,27 @@ Robot move_robot(Map map, Robot bot, Exit exit) {
           && bot.m[bot.posY + bot.speed][bot.posX] != 1
           && !will_be_stuck(map, bot, BOTTOM)
           //&& !is_corridor(map, bot, BOTTOM)
-          ) search = 0;
+          ) { search = 0; printf("\nRandom move: BOTTOM\n"), fflush(stdout); }
           else if (
           map.map[bot.posY + bot.speed][bot.posX] != 'x' 
-          && bot.m[bot.posY + bot.speed][bot.posX] != 1
-          && !will_be_stuck(map, bot, BOTTOM)
+          && bot.is_stuck == 1
+          //&& !will_be_stuck(map, bot, BOTTOM)
           //&& !is_corridor(map, bot, BOTTOM)
-          ) search = 0;
+          ) { search = 0; printf("\nRandom move: BOTTOM\n"), fflush(stdout); }
           break;
         case LEFT:
           if (
           map.map[bot.posY][bot.posX - bot.speed] != 'x' 
+          && bot.m[bot.posY][bot.posX - bot.speed] != 1
+          && !will_be_stuck(map, bot, LEFT)
+          //&& !is_corridor(map, bot, LEFT)
+          ) { search = 0; printf("\nRandom move: LEFT\n"), fflush(stdout); }
+          else if (
+          map.map[bot.posY][bot.posX - bot.speed] != 'x' 
           && bot.is_stuck == 1
           //&& !will_be_stuck(map, bot, LEFT)
           //&& !is_corridor(map, bot, LEFT)
-          ) search = 0;
+          ) { search = 0; printf("\nRandom move: LEFT\n"), fflush(stdout); }
           break;
       }
       
