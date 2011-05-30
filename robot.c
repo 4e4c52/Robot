@@ -5,6 +5,11 @@
 #include "headers/map.h"
 #include "headers/robot.h"
 
+/*
+ * Create a new robot
+ *
+ * @return Robot structure
+ */
 Robot new_robot(char name, int speed) {
 
   Robot bot;
@@ -22,6 +27,13 @@ Robot new_robot(char name, int speed) {
   
 }
 
+/*
+ * Move the robot on the map
+ * by calculating the availables moves
+ * regarding the exit coordinates of the map
+ *
+ * @return Robot structure containing the updated position of the robot
+ */
 Robot move_robot(Map map, Robot bot, Exit exit) {
 
   // Checking in which direction we should go...
@@ -90,9 +102,12 @@ Robot move_robot(Map map, Robot bot, Exit exit) {
     switch (horizontalMove) {
       case RIGHT:
         bot.posX++;
+        bot.direction = RIGHT;
         break;
       case LEFT:
         bot.posX--;
+        bot.direction = LEFT;
+        break;
     }
   
   }
@@ -105,9 +120,11 @@ Robot move_robot(Map map, Robot bot, Exit exit) {
     switch (verticalMove) {
       case TOP:
         bot.posY--;
+        bot.direction = TOP;
         break;
       case BOTTOM:
         bot.posY++;
+        bot.direction = BOTTOM;
         break;
     }
   
@@ -222,6 +239,12 @@ Robot move_robot(Map map, Robot bot, Exit exit) {
 
 }
 
+/*
+ * Check if the next move in the given direction
+ * will stuck the robot
+ *
+ * @return int 0 = not stuck, 1 = stuck
+ */
 int will_be_stuck(Map map, Robot bot, int direction) {
 	
 	int stuck = 0;
@@ -285,6 +308,13 @@ int will_be_stuck(Map map, Robot bot, int direction) {
 	
 }
 
+/*
+ * Check if the next move in the given direction
+ * will engage the bot in a corridor
+ *
+ * @return int 0 = not a corridor, 1 = corridor
+ * @deprecated
+ */
 int is_corridor(Map map, Robot bot, int direction) {
 	
 	int corridor = 0;

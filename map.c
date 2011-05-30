@@ -9,7 +9,7 @@
 /*
  * Read the map from the header and store it in memory 
  *
- * @return char pointer to the map in memory
+ * @return Map strcuture
  */
 Map read_map() {
   
@@ -59,6 +59,11 @@ void show_map(Map map, Robot bot) {
   
 }
 
+/*
+ * Find the exit coordinates of the map
+ *
+ * @return Exit structure
+ */
 Exit find_map_exit(Map map) {
 
   int i = 0, j = 0;
