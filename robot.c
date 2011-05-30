@@ -13,10 +13,9 @@ Robot new_robot(char name, int speed) {
   bot.speed = speed;
   bot.posX = ROBOT_DEFAULT_X;
   bot.posY = ROBOT_DEFAULT_Y;
+  bot.is_stuck = 0;
   bot.moves = 0;
   bot.direction = 0;
-  bot.last_direction = 3;
-  bot.dont_go = 0;
   bot.out = 0;
   
   return bot;
@@ -38,35 +37,38 @@ Robot move_robot(Map map, Robot bot, Exit exit) {
   
   // Now verifying where we can move...
   int availableMoves[4] = {0};
+  int is_stuck = 1;
   
   // Top
   if (
   map.map[bot.posY - bot.speed][bot.posX] != 'x' 
   && bot.m[bot.posY - bot.speed][bot.posX] != 1
   && !will_be_stuck(map, bot, TOP)
-  && !is_corridor(map, bot, TOP)
-  ) availableMoves[TOP] = 1;
+  //&& !is_corridor(map, bot, TOP)
+  ) { availableMoves[TOP] = 1; is_stuck = 0; }
   // Right
   if (
   map.map[bot.posY][bot.posX + bot.speed] != 'x'
   && bot.m[bot.posY][bot.posX + bot.speed] != 1
   && !will_be_stuck(map, bot, RIGHT)
-  && !is_corridor(map, bot, RIGHT)
-  ) availableMoves[RIGHT] = 1;
+  //&& !is_corridor(map, bot, RIGHT)
+  ) { availableMoves[RIGHT] = 1; is_stuck = 0; }
   // Bottom
   if (
   map.map[bot.posY + bot.speed][bot.posX] != 'x' 
   && bot.m[bot.posY + bot.speed][bot.posX] != 1
   && !will_be_stuck(map, bot, BOTTOM)
-  && !is_corridor(map, bot, BOTTOM)
-  ) availableMoves[BOTTOM] = 1;
+  //&& !is_corridor(map, bot, BOTTOM)
+  ) { availableMoves[BOTTOM] = 1; is_stuck = 0; }
   // Left
   if (
   map.map[bot.posY][bot.posX - bot.speed] != 'x'
   && bot.m[bot.posY][bot.posX - bot.speed] != 1
   && !will_be_stuck(map, bot, LEFT)
-  && !is_corridor(map, bot, LEFT)
-  ) availableMoves[LEFT] = 1;
+  //&& !is_corridor(map, bot, LEFT)
+  ) { availableMoves[LEFT] = 1; is_stuck = 0; }
+  
+  bot.is_stuck = is_stuck;
   
   // Now chosing the best move...
   
@@ -76,11 +78,9 @@ Robot move_robot(Map map, Robot bot, Exit exit) {
     switch (horizontalMove) {
       case RIGHT:
         bot.posX++;
-        bot.last_direction = RIGHT;
         break;
       case LEFT:
         bot.posX--;
-        bot.last_direction = LEFT;
     }
   
   }
@@ -89,16 +89,13 @@ Robot move_robot(Map map, Robot bot, Exit exit) {
     switch (verticalMove) {
       case TOP:
         bot.posY--;
-        bot.last_direction = TOP;
         break;
       case BOTTOM:
         bot.posY++;
-        bot.last_direction = BOTTOM;
         break;
     }
   
-  }
-   
+  } 
   // Doing it randomly
   else {
   
@@ -114,7 +111,13 @@ Robot move_robot(Map map, Robot bot, Exit exit) {
           map.map[bot.posY - bot.speed][bot.posX] != 'x' 
           && bot.m[bot.posY - bot.speed][bot.posX] != 1
           && !will_be_stuck(map, bot, TOP)
-          && !is_corridor(map, bot, TOP)
+          //&& !is_corridor(map, bot, TOP)
+          ) search = 0;
+          else if (
+          map.map[bot.posY - bot.speed][bot.posX] != 'x' 
+          && bot.is_stuck == 1
+          //&& !will_be_stuck(map, bot, TOP)
+          //&& !is_corridor(map, bot, TOP)
           ) search = 0;
           break;
         case RIGHT:
@@ -122,7 +125,13 @@ Robot move_robot(Map map, Robot bot, Exit exit) {
           map.map[bot.posY][bot.posX + bot.speed] != 'x' 
           && bot.m[bot.posY][bot.posX + bot.speed] != 1
           && !will_be_stuck(map, bot, RIGHT)
-          && !is_corridor(map, bot, RIGHT)
+          //&& !is_corridor(map, bot, RIGHT)
+          ) search = 0;
+          else if (
+          map.map[bot.posY][bot.posX + bot.speed] != 'x' 
+          && bot.is_stuck == 1
+          //&& !will_be_stuck(map, bot, RIGHT)
+          //&& !is_corridor(map, bot, RIGHT)
           ) search = 0;
           break;
         case BOTTOM:
@@ -130,15 +139,21 @@ Robot move_robot(Map map, Robot bot, Exit exit) {
           map.map[bot.posY + bot.speed][bot.posX] != 'x' 
           && bot.m[bot.posY + bot.speed][bot.posX] != 1
           && !will_be_stuck(map, bot, BOTTOM)
-          && !is_corridor(map, bot, BOTTOM)
+          //&& !is_corridor(map, bot, BOTTOM)
+          ) search = 0;
+          else if (
+          map.map[bot.posY + bot.speed][bot.posX] != 'x' 
+          && bot.m[bot.posY + bot.speed][bot.posX] != 1
+          && !will_be_stuck(map, bot, BOTTOM)
+          //&& !is_corridor(map, bot, BOTTOM)
           ) search = 0;
           break;
         case LEFT:
           if (
           map.map[bot.posY][bot.posX - bot.speed] != 'x' 
-          && bot.m[bot.posY][bot.posX - bot.speed] != 1
-          && !will_be_stuck(map, bot, LEFT)
-          && !is_corridor(map, bot, LEFT)
+          && bot.is_stuck == 1
+          //&& !will_be_stuck(map, bot, LEFT)
+          //&& !is_corridor(map, bot, LEFT)
           ) search = 0;
           break;
       }
@@ -149,19 +164,15 @@ Robot move_robot(Map map, Robot bot, Exit exit) {
     switch (randomMove) {
       case TOP:
         bot.posY--;
-        bot.last_direction = TOP;
         break;
       case RIGHT:
         bot.posX++;
-        bot.last_direction = RIGHT;
         break;
       case BOTTOM:
         bot.posY++;
-        bot.last_direction = BOTTOM;
         break;
       case LEFT:
         bot.posX--;
-        bot.last_direction = LEFT;
         break;
     }
   
@@ -243,54 +254,38 @@ int is_corridor(Map map, Robot bot, int direction) {
 	switch (direction) {
 		
 		case TOP:
-			if (
-			(map.map[bot.posY - bot.speed][bot.posX - bot.speed] == 'x' 
-			|| bot.m[bot.posY - bot.speed][bot.posX - bot.speed] == 1) 
-			&& (map.map[bot.posY - bot.speed][bot.posX + bot.speed] == 'x' 
-			|| bot.m[bot.posY - bot.speed][bot.posX + bot.speed] == 1)
-			&& (map.map[bot.posY - bot.speed - 1][bot.posX - bot.speed] == 'x' 
-			|| bot.m[bot.posY - bot.speed - 1][bot.posX - bot.speed] == 1) 
-			&& (map.map[bot.posY - bot.speed - 1][bot.posX + bot.speed] == 'x' 
-			|| bot.m[bot.posY - bot.speed - 1][bot.posX + bot.speed] == 1)
+			if ( 
+			(bot.m[bot.posY - bot.speed][bot.posX - bot.speed] == 1 
+			&& bot.m[bot.posY - bot.speed][bot.posX + bot.speed] == 1)
+			|| (bot.m[bot.posY - bot.speed - 1][bot.posX - bot.speed] == 1 
+			&& bot.m[bot.posY - bot.speed - 1][bot.posX + bot.speed] == 1)
 			) corridor = 1;
 			break;
 			
 		case RIGHT:
 			if (
-			(map.map[bot.posY - 1][bot.posX + bot.speed] == 'x' 
-			|| bot.m[bot.posY - 1][bot.posX + bot.speed] == 1) 
-		  && (map.map[bot.posY + 1][bot.posX + bot.speed] == 'x' 
-		  || bot.m[bot.posY + 1][bot.posX + bot.speed] == 1)
-		  && (map.map[bot.posY - 1][bot.posX + bot.speed + 1] == 'x' 
-		  || bot.m[bot.posY - 1][bot.posX + bot.speed + 1] == 1) 
-		  && (map.map[bot.posY + 1][bot.posX + bot.speed + 1] == 'x' 
-		  || bot.m[bot.posY + 1][bot.posX + bot.speed + 1] == 1)
+			(bot.m[bot.posY - 1][bot.posX + bot.speed] == 1 
+		  && bot.m[bot.posY + 1][bot.posX + bot.speed] == 1)
+		  || (bot.m[bot.posY - 1][bot.posX + bot.speed + 1] == 1
+		  && bot.m[bot.posY + 1][bot.posX + bot.speed + 1] == 1)
 		  ) corridor = 1;
 			break;
 			
 		case BOTTOM:
-			if (
-			(map.map[bot.posY + bot.speed][bot.posX - bot.speed] == 'x' 
-			|| bot.m[bot.posY + bot.speed][bot.posX - bot.speed] == 1) 
-			&& (map.map[bot.posY + bot.speed][bot.posX + bot.speed] == 'x' 
-			|| bot.m[bot.posY + bot.speed][bot.posX + bot.speed] == 1)
-			&& (map.map[bot.posY + bot.speed + 1][bot.posX - bot.speed] == 'x' 
-			|| bot.m[bot.posY + bot.speed + 1][bot.posX - bot.speed] == 1) 
-			&& (map.map[bot.posY + bot.speed + 1][bot.posX + bot.speed] == 'x' 
-			|| bot.m[bot.posY + bot.speed + 1][bot.posX + bot.speed] == 1)
+			if ( 
+			(bot.m[bot.posY + bot.speed][bot.posX - bot.speed] == 1 
+			&& bot.m[bot.posY + bot.speed][bot.posX + bot.speed] == 1) 
+			|| (bot.m[bot.posY + bot.speed + 1][bot.posX - bot.speed] == 1 
+			&& bot.m[bot.posY + bot.speed + 1][bot.posX + bot.speed] == 1)
 			) corridor = 1;
 			break;
 			
 		case LEFT:
 			if (
-			(map.map[bot.posY - 1][bot.posX - bot.speed] == 'x' 
-			|| bot.m[bot.posY - 1][bot.posX - bot.speed] == 1) 
-		  && (map.map[bot.posY + 1][bot.posX - bot.speed] == 'x' 
-		  || bot.m[bot.posY + 1][bot.posX - bot.speed] == 1)
-		  && (map.map[bot.posY - 1][bot.posX - bot.speed - 1] == 'x' 
-		  || bot.m[bot.posY - 1][bot.posX - bot.speed - 1] == 1) 
-		  && (map.map[bot.posY + 1][bot.posX - bot.speed - 1] == 'x' 
-		  || bot.m[bot.posY + 1][bot.posX - bot.speed - 1] == 1)
+			(bot.m[bot.posY - 1][bot.posX - bot.speed] == 1
+		  && bot.m[bot.posY + 1][bot.posX - bot.speed] == 1) 
+		  || (bot.m[bot.posY - 1][bot.posX - bot.speed - 1] == 1 
+		  && bot.m[bot.posY + 1][bot.posX - bot.speed - 1] == 1)
 		  ) corridor = 1;
 			break;
 		

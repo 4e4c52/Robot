@@ -11,9 +11,8 @@ struct Robot {
   int posY;
   int moves;
   int speed;
-  int direction; 
-  int last_direction;
-  int dont_go;
+  int direction;
+  int is_stuck;
   char m[MAP_HEIGHT][MAP_WIDTH];
   int out;
   
