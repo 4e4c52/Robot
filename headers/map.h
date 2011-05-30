@@ -16,6 +16,7 @@ typedef struct Map Map;
 struct Robot;
 
 /* Struct containing the exit */
+
 struct Exit {
   int x;
   int y;

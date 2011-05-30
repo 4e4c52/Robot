@@ -14,6 +14,7 @@ struct Robot {
   int direction;
   int is_stuck;
   char m[MAP_HEIGHT][MAP_WIDTH];
+  char mf[MAP_HEIGHT][MAP_WIDTH];
   int out;
   
 };
