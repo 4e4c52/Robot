@@ -29,10 +29,12 @@ Robot move_robot(Map map, Robot bot, Exit exit) {
   int verticalMove = 0;
   
   // Horizontal
-  if (bot.posX > exit.x) horizontalMove = LEFT;
+  if (bot.posX == exit.x) horizontalMove = -1;
+  else if (bot.posX > exit.x) horizontalMove = LEFT;
   else horizontalMove = RIGHT;
   // Vertical
-  if (bot.posY > exit.y) verticalMove = TOP;
+  if (bot.posY == exit.y) verticalMove = -1;
+  else if (bot.posY > exit.y) verticalMove = TOP;
   else verticalMove = BOTTOM;
   
   // Now verifying where we can move...
@@ -70,10 +72,18 @@ Robot move_robot(Map map, Robot bot, Exit exit) {
   
   bot.is_stuck = is_stuck;
   
+   printf("\nAvailable moves: %d, %d, %d, %d\n", availableMoves[TOP], availableMoves[RIGHT], availableMoves[BOTTOM], availableMoves[LEFT]);
+   printf("Is stuck: %d\n", bot.is_stuck);
+   
+   fflush(stdout);
+   
   // Now chosing the best move...
   
   // Starting by the directions where we should go
-  if (availableMoves[horizontalMove] == 1) {
+  if (horizontalMove != -1 && availableMoves[horizontalMove] == 1) {
+  
+  printf("Horizontal Move: OK");
+  fflush(stdout);
   
     switch (horizontalMove) {
       case RIGHT:
@@ -84,7 +94,10 @@ Robot move_robot(Map map, Robot bot, Exit exit) {
     }
   
   }
-  else if (availableMoves[verticalMove] == 1) {
+  else if (verticalMove != -1 && availableMoves[verticalMove] == 1) {
+  
+  printf("Vertical Move: OK");
+  fflush(stdout);
   
     switch (verticalMove) {
       case TOP:
@@ -98,6 +111,9 @@ Robot move_robot(Map map, Robot bot, Exit exit) {
   } 
   // Doing it randomly
   else {
+  
+  printf("Random: OK");
+  fflush(stdout);
   
     int randomMove = 0, search = 1;
   
@@ -194,6 +210,13 @@ Robot move_robot(Map map, Robot bot, Exit exit) {
 int will_be_stuck(Map map, Robot bot, int direction) {
 	
 	int stuck = 0;
+	
+	if (
+	map.map[bot.posY][bot.posX + 1] == 'S' 
+	|| map.map[bot.posY + 1][bot.posX] == 'S'
+	|| map.map[bot.posY][bot.posX + 1] == 'S'
+	|| map.map[bot.posY - 1][bot.posX] == 'S'
+	) return stuck;
 	
 	switch (direction) {
 		
