@@ -48,4 +48,4 @@ char appart[] =
 "x     x    x                        x    xxxxxxx x"
 "x     x    xxxxx                    x    x       x"
 "x          x                        x            x"
-"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxSxxxx";
+"xxxxxxxxxxxxxxxxxxxxxxxxxxSxxxxxxxxxxxxxxxxxxxxxxx";

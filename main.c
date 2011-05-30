@@ -24,7 +24,7 @@ int main(int argc, char* argv[]) {
   exit = find_map_exit(map);
   
   /* Creating the robot */
-  bot = new_robot('R', 1);
+  bot = new_robot('O', 1);
   
   /* Showing the map */
   show_map(map, bot);
@@ -32,7 +32,7 @@ int main(int argc, char* argv[]) {
   /* Moving the bot! */
   while (bot.out == 0) {
   
-    SDL_Delay(50);
+    SDL_Delay(250);
     bot = move_robot(map, bot, exit);
     show_map(map, bot);
     
