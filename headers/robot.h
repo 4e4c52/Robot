@@ -13,11 +13,15 @@ struct Robot {
   int speed;
   int direction;
   int is_stuck;
-  int is_random;
   int random_count;
   char m[MAP_HEIGHT][MAP_WIDTH];
-  char footprints[MAP_HEIGHT][MAP_WIDTH];
   int out;
+  
+  /* SDL vars */
+  char footprints[MAP_HEIGHT][MAP_WIDTH];
+  int is_random;
+  int vertical;
+  int horizontal;
   
 };
 
@@ -27,7 +31,6 @@ typedef struct Robot Robot;
 Robot new_robot(char name, int speed);
 Robot move_robot(Map map, Robot bot, Exit exit);
 int will_be_stuck(Map map, Robot bot, int direction);
-int is_corridor(Map map, Robot bot, int direction);
 void flush_robot_memory(Robot bot);
 
 #endif

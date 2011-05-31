@@ -40,7 +40,7 @@ char appart[]=
 "x     x   xx   x       x                         x"
 "x     x   xS   x       x                         x"
 "x     x        x       x                         x"
-"x     xxxxxxxxxx       x                         x"
+"x     xxxx  xxxx       x                         x"
 "x                      x                         x"
 "x                      x                         x"
 "x                      x                         x"

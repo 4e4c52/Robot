@@ -46,10 +46,12 @@ Robot move_robot(Map map, Robot bot, Exit exit) {
   if (bot.posX == exit.x) horizontalMove = -1;
   else if (bot.posX > exit.x) horizontalMove = LEFT;
   else horizontalMove = RIGHT;
+  bot.horizontal = horizontalMove;
   // Vertical
   if (bot.posY == exit.y) verticalMove = -1;
   else if (bot.posY > exit.y) verticalMove = TOP;
   else verticalMove = BOTTOM;
+  bot.vertical = verticalMove;
   
   // Now verifying where we can move...
   int availableMoves[4] = {0};
@@ -85,6 +87,7 @@ Robot move_robot(Map map, Robot bot, Exit exit) {
   ) { availableMoves[LEFT] = 1; is_stuck = 0; }
   
   bot.is_stuck = is_stuck;
+  bot.is_random = 0;
    
   // Now chosing the best move...
   
@@ -121,6 +124,7 @@ Robot move_robot(Map map, Robot bot, Exit exit) {
   else {
   
     int randomMove = 0, search = 1, firstLap = 1;
+    bot.is_random = 1;
   
     // Searching for a good move...
     while (search) {
@@ -219,7 +223,6 @@ Robot move_robot(Map map, Robot bot, Exit exit) {
   bot.m[bot.posY][bot.posX] = 1;
   bot.footprints[bot.posY][bot.posX] = bot.direction;
   bot.moves++;
-  printf("#moves: %d\n", bot.moves);
   
   // Is the bot out?
   if (map.map[bot.posY][bot.posX] == 'S') {
@@ -320,60 +323,7 @@ void flush_robot_memory(Robot bot) {
   
   bot.out = 0;
   bot.moves = 0;
+  bot.is_random = 0;
+  bot.random_count = 0;
 
-}
-
-/*
- * Check if the next move in the given direction
- * will engage the bot in a corridor
- *
- * @return int 0 = not a corridor, 1 = corridor
- * @deprecated
- */
-int is_corridor(Map map, Robot bot, int direction) {
-	
-	int corridor = 0;
-	
-	switch (direction) {
-		
-		case TOP:
-			if ( 
-			(bot.m[bot.posY - bot.speed][bot.posX - bot.speed] == 1 
-			&& bot.m[bot.posY - bot.speed][bot.posX + bot.speed] == 1)
-			|| (bot.m[bot.posY - bot.speed - 1][bot.posX - bot.speed] == 1 
-			&& bot.m[bot.posY - bot.speed - 1][bot.posX + bot.speed] == 1)
-			) corridor = 1;
-			break;
-			
-		case RIGHT:
-			if (
-			(bot.m[bot.posY - 1][bot.posX + bot.speed] == 1 
-		  && bot.m[bot.posY + 1][bot.posX + bot.speed] == 1)
-		  || (bot.m[bot.posY - 1][bot.posX + bot.speed + 1] == 1
-		  && bot.m[bot.posY + 1][bot.posX + bot.speed + 1] == 1)
-		  ) corridor = 1;
-			break;
-			
-		case BOTTOM:
-			if ( 
-			(bot.m[bot.posY + bot.speed][bot.posX - bot.speed] == 1 
-			&& bot.m[bot.posY + bot.speed][bot.posX + bot.speed] == 1) 
-			|| (bot.m[bot.posY + bot.speed + 1][bot.posX - bot.speed] == 1 
-			&& bot.m[bot.posY + bot.speed + 1][bot.posX + bot.speed] == 1)
-			) corridor = 1;
-			break;
-			
-		case LEFT:
-			if (
-			(bot.m[bot.posY - 1][bot.posX - bot.speed] == 1
-		  && bot.m[bot.posY + 1][bot.posX - bot.speed] == 1) 
-		  || (bot.m[bot.posY - 1][bot.posX - bot.speed - 1] == 1 
-		  && bot.m[bot.posY + 1][bot.posX - bot.speed - 1] == 1)
-		  ) corridor = 1;
-			break;
-		
-	}
-	
-	return corridor;
-	
 }

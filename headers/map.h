@@ -1,6 +1,5 @@
 #ifndef MAP_H
 #define MAP_H
-//#include "robot.h"
 
 /* Struct containing the map */
 

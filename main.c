@@ -40,6 +40,8 @@ int main(int argc, char* argv[]) {
   	  refresh_screen(map, bot, surfaces);
     
     }
+    
+    refresh_screen(map, bot, surfaces);
   
     keep_running = manage_controls(surfaces);
     
@@ -59,6 +61,7 @@ int main(int argc, char* argv[]) {
   
     SDL_Delay(TIME_BTW_MOVES);
     bot = move_robot(map, bot, exit);
+    printf("\nPerformed %d moves...\n", bot.moves);
     show_map(map, bot);
     
   }  
