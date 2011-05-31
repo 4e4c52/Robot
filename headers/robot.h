@@ -13,6 +13,8 @@ struct Robot {
   int speed;
   int direction;
   int is_stuck;
+  int is_random;
+  int random_count;
   char m[MAP_HEIGHT][MAP_WIDTH];
   char footprints[MAP_HEIGHT][MAP_WIDTH];
   int out;

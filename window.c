@@ -69,7 +69,7 @@ void refresh_screen(Map map, Robot bot, Surfaces surfaces) {
   /* Showing the objects on the screen */
   for (i = 0 ; i < MAP_HEIGHT ; i++) {
     
-  	for (j = 0; j < (MAP_WIDTH - SIDEBAR_WIDTH); j++) {
+  	for (j = 0; j < MAP_WIDTH; j++) {
         
   		surfaces.position.x = i * BLOCK_SIZE;
       surfaces.position.y = j * BLOCK_SIZE;

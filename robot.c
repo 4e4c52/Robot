@@ -19,6 +19,8 @@ Robot new_robot(char name, int speed) {
   bot.posX = ROBOT_DEFAULT_X;
   bot.posY = ROBOT_DEFAULT_Y;
   bot.is_stuck = 0;
+  bot.is_random = 0;
+  bot.random_count = 0;
   bot.moves = 0;
   bot.direction = 0;
   bot.out = 0;
@@ -83,21 +85,11 @@ Robot move_robot(Map map, Robot bot, Exit exit) {
   ) { availableMoves[LEFT] = 1; is_stuck = 0; }
   
   bot.is_stuck = is_stuck;
-  
-  printf("\nAvailable moves: %d, %d, %d, %d\n", 
-  availableMoves[TOP], availableMoves[RIGHT], availableMoves[BOTTOM], availableMoves[LEFT]);
-  printf("Is stuck: %d\n", bot.is_stuck);
-  printf("Moves: %d, %d\n", horizontalMove, verticalMove);
-  fflush(stdout);
    
   // Now chosing the best move...
   
   // Starting by the directions where we should go
   if (horizontalMove != -1 && availableMoves[horizontalMove] == 1) {
-  
-    printf("Horizontal Move: OK\n");
-    printf("Random: NONE\n");
-    fflush(stdout);
   
     switch (horizontalMove) {
       case RIGHT:
@@ -112,10 +104,6 @@ Robot move_robot(Map map, Robot bot, Exit exit) {
   
   }
   else if (verticalMove != -1 && availableMoves[verticalMove] == 1) {
-  
-    printf("Vertical Move: OK\n");
-    printf("Random: NONE\n");
-    fflush(stdout);
   
     switch (verticalMove) {
       case TOP:
@@ -132,16 +120,19 @@ Robot move_robot(Map map, Robot bot, Exit exit) {
   // Doing it randomly
   else {
   
-    printf("Random: OK\n");
-    fflush(stdout);
-  
     int randomMove = 0, search = 1, firstLap = 1;
   
     // Searching for a good move...
     while (search) {
       
       randomMove = (rand() % 4);
-      if (firstLap) randomMove = bot.direction;
+      if (firstLap && bot.random_count < ROBOT_MAX_RANDOM){
+        randomMove = bot.direction;
+        bot.random_count++;
+      }
+      else {
+        bot.random_count = 0;
+      }
       
       switch (randomMove) {
         case TOP:
@@ -150,13 +141,13 @@ Robot move_robot(Map map, Robot bot, Exit exit) {
             && bot.m[bot.posY - bot.speed][bot.posX] != 1
             && !will_be_stuck(map, bot, TOP)
             //&& !is_corridor(map, bot, TOP)
-          ) { search = 0; bot.direction = TOP; printf("Random move: TOP\n"), fflush(stdout); }
+          ) { search = 0; bot.direction = TOP; }
           else if (
             map.map[bot.posY - bot.speed][bot.posX] != 'x' 
             //&& !will_be_stuck(map, bot, TOP)
             //&& !is_corridor(map, bot, TOP)
             && bot.is_stuck == 1
-          ) { search = 0; bot.direction = TOP; printf("Random move: TOP\n"), fflush(stdout); }
+          ) { search = 0; bot.direction = TOP; }
           break;
         case RIGHT:
           if (
@@ -164,13 +155,13 @@ Robot move_robot(Map map, Robot bot, Exit exit) {
             && bot.m[bot.posY][bot.posX + bot.speed] != 1
             && !will_be_stuck(map, bot, RIGHT)
             //&& !is_corridor(map, bot, RIGHT)
-          ) { search = 0; bot.direction = RIGHT; printf("Random move: RIGHT\n"), fflush(stdout); }
+          ) { search = 0; bot.direction = RIGHT; }
           else if (
             map.map[bot.posY][bot.posX + bot.speed] != 'x' 
             //&& !will_be_stuck(map, bot, RIGHT)
             //&& !is_corridor(map, bot, RIGHT)
             && bot.is_stuck == 1
-          ) { search = 0; bot.direction = RIGHT; printf("Random move: RIGHT\n"), fflush(stdout); }
+          ) { search = 0; bot.direction = RIGHT; }
           break;
         case BOTTOM:
           if (
@@ -178,13 +169,13 @@ Robot move_robot(Map map, Robot bot, Exit exit) {
             && bot.m[bot.posY + bot.speed][bot.posX] != 1
             && !will_be_stuck(map, bot, BOTTOM)
             //&& !is_corridor(map, bot, BOTTOM)
-          ) { search = 0; bot.direction = BOTTOM; printf("Random move: BOTTOM\n"), fflush(stdout); }
+          ) { search = 0; bot.direction = BOTTOM; }
           else if (
             map.map[bot.posY + bot.speed][bot.posX] != 'x' 
             //&& !will_be_stuck(map, bot, BOTTOM)
             //&& !is_corridor(map, bot, BOTTOM)
             && bot.is_stuck == 1
-          ) { search = 0; bot.direction = BOTTOM; printf("Random move: BOTTOM\n"), fflush(stdout); }
+          ) { search = 0; bot.direction = BOTTOM; }
           break;
         case LEFT:
           if (
@@ -192,13 +183,13 @@ Robot move_robot(Map map, Robot bot, Exit exit) {
             && bot.m[bot.posY][bot.posX - bot.speed] != 1
             && !will_be_stuck(map, bot, LEFT)
             //&& !is_corridor(map, bot, LEFT)
-          ) { search = 0; bot.direction = LEFT; printf("Random move: LEFT\n"), fflush(stdout); }
+          ) { search = 0; bot.direction = LEFT; }
           else if (
             map.map[bot.posY][bot.posX - bot.speed] != 'x' 
             //&& !will_be_stuck(map, bot, LEFT)
             //&& !is_corridor(map, bot, LEFT)
             && bot.is_stuck == 1
-          ) { search = 0; bot.direction = LEFT; printf("Random move: LEFT\n"), fflush(stdout); }
+          ) { search = 0; bot.direction = LEFT; }
           break;
       }
       
@@ -228,7 +219,6 @@ Robot move_robot(Map map, Robot bot, Exit exit) {
   bot.m[bot.posY][bot.posX] = 1;
   bot.footprints[bot.posY][bot.posX] = bot.direction;
   bot.moves++;
-  printf("Exit: %dx%d\n", exit.y, exit.x);
   printf("#moves: %d\n", bot.moves);
   
   // Is the bot out?

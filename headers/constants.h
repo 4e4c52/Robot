@@ -9,8 +9,9 @@
 #define MAP_HEIGHT 50
 
 /* Robot constants */
-#define ROBOT_DEFAULT_X 1;
-#define ROBOT_DEFAULT_Y 1;
+#define ROBOT_DEFAULT_X 1
+#define ROBOT_DEFAULT_Y 1
+#define ROBOT_MAX_RANDOM 5
 
 enum Directions { TOP, RIGHT, BOTTOM, LEFT};
 typedef enum Directions Directions;
@@ -18,7 +19,7 @@ typedef enum Directions Directions;
 /* SDL constants */
 #define SDL_ENABLED // Comment this line to use the console
 #define BLOCK_SIZE 20 // 20px OR 34px
-#define SIDEBAR_WIDTH 0
+#define SIDEBAR_WIDTH 200
 #define WINDOW_WIDTH (BLOCK_SIZE * MAP_WIDTH) + SIDEBAR_WIDTH
 #define WINDOW_HEIGHT BLOCK_SIZE * MAP_HEIGHT
 
