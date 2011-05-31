@@ -24,6 +24,8 @@ int main(int argc, char* argv[]) {
   /* SDL Enabled */
 	#ifdef SDL_ENABLED
   
+  printf("\nNow looking for an exit to escape this shit...\nWatch me through the window!\n");
+  
   int keep_running = 1;
   Surfaces surfaces;
   surfaces = load_surfaces();
@@ -53,6 +55,8 @@ int main(int argc, char* argv[]) {
   
   /* Terminal mod (SDL Disabled) */
   #ifndef SDL_ENABLED
+  
+  printf("\nNow looking for an exit to escape this shit...\n");
   
   flush_robot_memory(bot);
   show_map(map, bot);
