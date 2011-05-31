@@ -226,7 +226,7 @@ Robot move_robot(Map map, Robot bot, Exit exit) {
   
   // Remembering the position
   bot.m[bot.posY][bot.posX] = 1;
-  bot.mf[bot.posY][bot.posX] = bot.direction;
+  bot.footprints[bot.posY][bot.posX] = bot.direction;
   bot.moves++;
   printf("Exit: %dx%d\n", exit.y, exit.x);
   printf("#moves: %d\n", bot.moves);

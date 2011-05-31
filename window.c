@@ -16,22 +16,44 @@
 Surfaces load_surfaces(void) {
 	
 	Surfaces surfaces;
+	char fileName[100] = {0};
 
   SDL_Init(SDL_INIT_VIDEO);
-  SDL_WM_SetIcon(IMG_Load("sprites/exit_20.jpg"), NULL);
+  
+  sprintf(fileName,"sprites/wall_%d.jpg", BLOCK_SIZE);
+  SDL_WM_SetIcon(IMG_Load(fileName), NULL);
+  
   surfaces.screen = SDL_SetVideoMode(WINDOW_WIDTH, WINDOW_HEIGHT, 32, SDL_HWSURFACE | SDL_DOUBLEBUF);
   SDL_WM_SetCaption("Find the exit bot!", NULL);
   
-  surfaces.wall = IMG_Load("sprites/wall_20.jpg");
+  surfaces.wall = IMG_Load(fileName);
+  
+  sprintf(fileName,"sprites/exit_%d.jpg", BLOCK_SIZE);
   surfaces.exit = IMG_Load("sprites/exit_20.jpg");
-  surfaces.bot[TOP] = IMG_Load("sprites/bot_top_20.gif");
-  surfaces.bot[RIGHT] = IMG_Load("sprites/bot_right_20.gif");
-  surfaces.bot[BOTTOM] = IMG_Load("sprites/bot_bottom_20.gif");
-  surfaces.bot[LEFT] = IMG_Load("sprites/bot_left_20.gif");
-  surfaces.footprint[TOP] = IMG_Load("sprites/footprint_top_20.jpg");
-  surfaces.footprint[RIGHT] = IMG_Load("sprites/footprint_right_20.jpg");
-  surfaces.footprint[BOTTOM] = IMG_Load("sprites/footprint_bottom_20.jpg");
-  surfaces.footprint[LEFT] = IMG_Load("sprites/footprint_left_20.jpg");
+  
+  sprintf(fileName,"sprites/bot_top_%d.gif", BLOCK_SIZE);
+  surfaces.bot[TOP] = IMG_Load(fileName);
+  
+  sprintf(fileName,"sprites/bot_right_%d.gif", BLOCK_SIZE);
+  surfaces.bot[RIGHT] = IMG_Load(fileName);
+  
+  sprintf(fileName,"sprites/bot_bottom_%d.gif", BLOCK_SIZE);
+  surfaces.bot[BOTTOM] = IMG_Load(fileName);
+  
+  sprintf(fileName,"sprites/bot_left_%d.gif", BLOCK_SIZE);
+  surfaces.bot[LEFT] = IMG_Load(fileName);
+  
+  sprintf(fileName,"sprites/footprint_top_%d.jpg", BLOCK_SIZE);
+  surfaces.footprint[TOP] = IMG_Load(fileName);
+  
+  sprintf(fileName,"sprites/footprint_right_%d.jpg", BLOCK_SIZE);
+  surfaces.footprint[RIGHT] = IMG_Load(fileName);
+  
+  sprintf(fileName,"sprites/footprint_bottom_%d.jpg", BLOCK_SIZE);
+  surfaces.footprint[BOTTOM] = IMG_Load(fileName);
+  
+  sprintf(fileName,"sprites/footprint_left_%d.jpg", BLOCK_SIZE);
+  surfaces.footprint[LEFT] = IMG_Load(fileName);
   
   return surfaces;
   
@@ -83,7 +105,7 @@ void refresh_screen(Map map, Robot bot, Surfaces surfaces) {
 			}
 			else if (bot.m[j][i] == 1) {
 				
-				switch (bot.mf[j][i]) {
+				switch (bot.footprints[j][i]) {
         		
         	case TOP:
         		SDL_BlitSurface(surfaces.footprint[TOP], NULL, surfaces.screen, &surfaces.position);
