@@ -310,6 +310,30 @@ int will_be_stuck(Map map, Robot bot, int direction) {
 }
 
 /*
+ * Flush the robot memory
+ *
+ * @return void
+ */
+void flush_robot_memory(Robot bot) {
+
+  int i = 0, j = 0;
+  
+  for (i = 0; i < MAP_HEIGHT; i++) {
+  
+    for (j = 0; j < MAP_WIDTH; j++) {
+    
+      bot.m[i][j] = 0 ;
+      
+    }
+    
+  }
+  
+  bot.out = 0;
+  bot.moves = 0;
+
+}
+
+/*
  * Check if the next move in the given direction
  * will engage the bot in a corridor
  *

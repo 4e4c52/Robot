@@ -29,7 +29,7 @@ Surfaces load_surfaces(void) {
   surfaces.wall = IMG_Load(fileName);
   
   sprintf(fileName,"sprites/exit_%d.jpg", BLOCK_SIZE);
-  surfaces.exit = IMG_Load("sprites/exit_20.jpg");
+  surfaces.exit = IMG_Load(fileName);
   
   sprintf(fileName,"sprites/bot_top_%d.gif", BLOCK_SIZE);
   surfaces.bot[TOP] = IMG_Load(fileName);
@@ -69,7 +69,7 @@ void refresh_screen(Map map, Robot bot, Surfaces surfaces) {
   /* Showing the objects on the screen */
   for (i = 0 ; i < MAP_HEIGHT ; i++) {
     
-  	for (j = 0 ; j < MAP_WIDTH ; j++) {
+  	for (j = 0; j < (MAP_WIDTH - SIDEBAR_WIDTH); j++) {
         
   		surfaces.position.x = i * BLOCK_SIZE;
       surfaces.position.y = j * BLOCK_SIZE;
@@ -134,6 +134,45 @@ void refresh_screen(Map map, Robot bot, Surfaces surfaces) {
   /* Refreshing the screen */
 	SDL_Flip(surfaces.screen);
 	
+}
+
+/*
+ * Manage the events while the bot
+ * is searching the exit
+ *
+ * @return 0 if the programe must top
+ * or 1 otherwise
+ */
+int manage_events(Surfaces surfaces) {
+
+  int must_continue = 1;
+
+  SDL_Delay(TIME_BTW_MOVES);
+  while (SDL_PollEvent(&surfaces.event)) {
+  
+    if (surfaces.event.type == SDL_KEYDOWN && surfaces.event.key.keysym.sym == SDLK_ESCAPE) {
+      must_continue = 0;
+    }
+    
+  }
+  
+  return must_continue;
+  
+}
+
+int manage_controls(Surfaces surfaces) {
+  
+  int must_continue = 1;
+  
+  SDL_WaitEvent(&surfaces.event);   
+  if (surfaces.event.type == SDL_QUIT) must_continue = 0;  
+  else if (surfaces.event.type == SDL_KEYDOWN) {
+    if (surfaces.event.key.keysym.sym == SDLK_ESCAPE) must_continue = 0;
+    else if (surfaces.event.key.keysym.sym == SDLK_UP) must_continue = 0;
+  }
+  
+  return must_continue;
+  
 }
 
 void house_keeping(Surfaces surfaces) {

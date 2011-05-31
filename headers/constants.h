@@ -17,8 +17,9 @@ typedef enum Directions Directions;
 
 /* SDL constants */
 #define SDL_ENABLED // Comment this line to use the console
-#define BLOCK_SIZE 20 // 34px
-#define WINDOW_WIDTH BLOCK_SIZE * MAP_WIDTH
+#define BLOCK_SIZE 20 // 20px OR 34px
+#define SIDEBAR_WIDTH 0
+#define WINDOW_WIDTH (BLOCK_SIZE * MAP_WIDTH) + SIDEBAR_WIDTH
 #define WINDOW_HEIGHT BLOCK_SIZE * MAP_HEIGHT
 
 enum Objects { EMPTY, FOOTPRINT, WALL, BOT, EXIT };

@@ -26,5 +26,6 @@ Robot new_robot(char name, int speed);
 Robot move_robot(Map map, Robot bot, Exit exit);
 int will_be_stuck(Map map, Robot bot, int direction);
 int is_corridor(Map map, Robot bot, int direction);
+void flush_robot_memory(Robot bot);
 
 #endif

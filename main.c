@@ -10,78 +10,51 @@
 
 int main(int argc, char* argv[]) {
   
-  /* Initializing the random generator */
-  srand(time(NULL));
-  
-  /* Vars */
+  /* Common Vars */
   Map map;
   Robot bot;
   Exit exit;
-  int keep_window = 1, retry = 1;
   
+  /* Common Initializations */
+  srand(time(NULL));
   map = read_map();
-  bot = new_robot('O', 1);
   exit = find_map_exit(map);
+  bot = new_robot('O', 1);
   
+  /* SDL Enabled */
 	#ifdef SDL_ENABLED
   
+  int keep_running = 1;
   Surfaces surfaces;
-  
   surfaces = load_surfaces();
   
-  while(retry) {
-  
+  while (keep_running) {
+    
+    flush_robot_memory(bot);
     refresh_screen(map, bot, surfaces);
   
-    while (bot.out == 0) {
+    while (bot.out == 0 && keep_running == 1) {
   	
-  	  SDL_Delay(TIME_BTW_MOVES);
+  	  keep_running = manage_events(surfaces);  
       bot = move_robot(map, bot, exit);
   	  refresh_screen(map, bot, surfaces);
     
     }
   
-    /* Waiting loop */
-    while (keep_window) {
-  
-      SDL_WaitEvent(&surfaces.event);
-      printf ("event:%d\n",surfaces.event.type);fflush(stdout);
-      switch (surfaces.event.type) {
-    
-        case SDL_QUIT:
-          keep_window = 0;
-          retry = 0;
-          break;
-            
-        case SDL_KEYDOWN:
-          switch(surfaces.event.key.keysym.sym) {
-            case SDLK_ESCAPE:
-              keep_window = 0;
-              retry = 0;
-              break;
-            case SDLK_r:
-              retry = 1;
-              break;
-          }
-        break;
-      
-      }
-    
-    }
+    keep_running = manage_controls(surfaces);
     
   }
   
-  /* Cleaning all surfaces */
   house_keeping(surfaces);
   
 	#endif
   
+  /* Terminal mod (SDL Disabled) */
   #ifndef SDL_ENABLED
   
-  /* Showing the map */
+  flush_robot_memory(bot);
   show_map(map, bot);
   
-  /* Moving the bot! */
   while (bot.out == 0) {
   
     SDL_Delay(TIME_BTW_MOVES);
@@ -92,7 +65,13 @@ int main(int argc, char* argv[]) {
   
   #endif
   
-  printf("\nThe bot found the exit after %d moves!\n\n", bot.moves);
+  /* Last message in the terminal */
+  if (bot.out == 1) {
+    printf("\nThe bot found the exit after %d moves!\n\n", bot.moves);
+  }
+  else {
+    printf("\nSorry you had to stop the bot...\n\n");
+  }
     
   return EXIT_SUCCESS;
 

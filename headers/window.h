@@ -26,5 +26,7 @@ typedef struct Surfaces Surfaces;
 Surfaces load_surfaces(void);
 void refresh_screen(Map map, Robot bot, Surfaces surfaces);
 void house_keeping(Surfaces surfaces);
+int manage_events(Surfaces surfaces);
+int manage_controls(Surfaces surfaces);
 
 #endif
