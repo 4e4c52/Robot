@@ -24,7 +24,4 @@ typedef enum Directions Directions;
 #define WINDOW_WIDTH (BLOCK_SIZE * MAP_WIDTH) + SIDEBAR_WIDTH
 #define WINDOW_HEIGHT BLOCK_SIZE * MAP_HEIGHT
 
-enum Objects { EMPTY, FOOTPRINT, WALL, BOT, EXIT };
-typedef enum Objects Objects;
-
 #endif
