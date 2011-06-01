@@ -2,7 +2,8 @@
 
 ### Config
 
-You can set some configuration directives in the file _headers/constants.h_ like:
+You can set some configuration directives in the file _headers/constants.h_ like below.
+
 * Map blocks number
   * Width
   * Height
@@ -13,7 +14,7 @@ You can set some configuration directives in the file _headers/constants.h_ like
 * Size of the right sidebar
   * Width
   * Padding
-  
+
 ### Moves
 
 The robot knows its position and the exit position.
