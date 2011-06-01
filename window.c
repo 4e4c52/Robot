@@ -27,50 +27,75 @@ Surfaces load_surfaces(void) {
   surfaces.screen = SDL_SetVideoMode(WINDOW_WIDTH, WINDOW_HEIGHT, 32, SDL_HWSURFACE | SDL_DOUBLEBUF);
   SDL_WM_SetCaption("Find the exit bot!", NULL);
   
+  // Wall
   sprintf(fileName,"sprites/wall_%d.jpg", BLOCK_SIZE);
   surfaces.wall = IMG_Load(fileName);
   
+  // Exit
   sprintf(fileName,"sprites/exit_%d.jpg", BLOCK_SIZE);
   surfaces.exit = IMG_Load(fileName);
   
+  // Bot top
   sprintf(fileName,"sprites/bot_top_%d.gif", BLOCK_SIZE);
   surfaces.bot[TOP] = IMG_Load(fileName);
   
+  // Bot right
   sprintf(fileName,"sprites/bot_right_%d.gif", BLOCK_SIZE);
   surfaces.bot[RIGHT] = IMG_Load(fileName);
   
+  // Bot bottom
   sprintf(fileName,"sprites/bot_bottom_%d.gif", BLOCK_SIZE);
   surfaces.bot[BOTTOM] = IMG_Load(fileName);
   
+  // Bot left
   sprintf(fileName,"sprites/bot_left_%d.gif", BLOCK_SIZE);
   surfaces.bot[LEFT] = IMG_Load(fileName);
   
+  // Footprint top
   sprintf(fileName,"sprites/footprint_top_%d.jpg", BLOCK_SIZE);
   surfaces.footprint[TOP] = IMG_Load(fileName);
   
+  // Footprint right
   sprintf(fileName,"sprites/footprint_right_%d.jpg", BLOCK_SIZE);
   surfaces.footprint[RIGHT] = IMG_Load(fileName);
   
+  // Footprint bottom
   sprintf(fileName,"sprites/footprint_bottom_%d.jpg", BLOCK_SIZE);
   surfaces.footprint[BOTTOM] = IMG_Load(fileName);
   
+  // Footprint left
   sprintf(fileName,"sprites/footprint_left_%d.jpg", BLOCK_SIZE);
   surfaces.footprint[LEFT] = IMG_Load(fileName);
   
+  // Loading the font (Ubuntu default)
   surfaces.font = TTF_OpenFont("fonts/monospace.ttf", 15);
   
+  // Setting the font color to black
   SDL_Color font_color = {0, 0, 0};
+  // Setting the font style to boldf
   TTF_SetFontStyle(surfaces.font, TTF_STYLE_BOLD);
+  
+  // Moves count text
   surfaces.moves = TTF_RenderText_Blended(surfaces.font, "Moves: 0", font_color);
+  // Random text
   surfaces.random = TTF_RenderText_Blended(surfaces.font, "Random: NO", font_color);
+  // Should move on vertical text
   surfaces.vertical = TTF_RenderText_Blended(surfaces.font, "Vertical: NONE", font_color);
+  // Should move on horizontal text
   surfaces.horizontal = TTF_RenderText_Blended(surfaces.font, "Horizontal: NONE", font_color);
+  // Exit status text
   surfaces.found = TTF_RenderText_Blended(surfaces.font, "Exit: SEARCHING", font_color);
 
   return surfaces;
   
 }
 
+/*
+ * Refresh the screen 
+ * applying the updated surfaces
+ *
+ * @return void
+ */
 void refresh_screen(Map map, Robot bot, Surfaces surfaces) {
 	
 	int i = 0, j = 0;
@@ -148,41 +173,50 @@ void refresh_screen(Map map, Robot bot, Surfaces surfaces) {
 	
 	char movesText[20] = "";
 	SDL_Color font_color = {0, 0, 0};
-	
 	TTF_SetFontStyle(surfaces.font, TTF_STYLE_BOLD);
 	
+	// Moves count text
 	sprintf(movesText, "Moves: %d", bot.moves);	
 	surfaces.moves = TTF_RenderText_Blended(surfaces.font, movesText, font_color);
 	
+	// Random text
 	if (bot.is_random == 1) surfaces.random = TTF_RenderText_Blended(surfaces.font, "Random: YES", font_color);
 	else surfaces.random = TTF_RenderText_Blended(surfaces.font, "Random: NO", font_color);
 	
+	// Vertical text
 	if (bot.vertical == -1) surfaces.vertical = TTF_RenderText_Blended(surfaces.font, "Vertical: NONE", font_color);
 	else if (bot.vertical == TOP) surfaces.vertical = TTF_RenderText_Blended(surfaces.font, "Vertical: TOP", font_color);
 	else surfaces.vertical = TTF_RenderText_Blended(surfaces.font, "Vertical: BOTTOM", font_color);
 	
+	// Horizontal text
 	if (bot.horizontal == -1) surfaces.horizontal = TTF_RenderText_Blended(surfaces.font, "Horizontal: NONE", font_color);
 	else if (bot.horizontal == RIGHT) surfaces.horizontal = TTF_RenderText_Blended(surfaces.font, "Horizontal: RIGHT", font_color);
 	else surfaces.horizontal = TTF_RenderText_Blended(surfaces.font, "Horizontal: LEFT", font_color);
 	
+	// Exit text
 	if (bot.out == 1) surfaces.found = TTF_RenderText_Blended(surfaces.font, "Exit: FOUND!", font_color);
 	
+	// Blit moves count
 	surfaces.position.x = (WINDOW_WIDTH - SIDEBAR_WIDTH + SIDEBAR_PADDING);
 	surfaces.position.y = SIDEBAR_PADDING;
 	SDL_BlitSurface(surfaces.moves, NULL, surfaces.screen, &surfaces.position);
 	
+	// Blit random
 	surfaces.position.x = (WINDOW_WIDTH - SIDEBAR_WIDTH + SIDEBAR_PADDING);
 	surfaces.position.y = (SIDEBAR_PADDING * 2);
 	SDL_BlitSurface(surfaces.random, NULL, surfaces.screen, &surfaces.position);
 	
+	// Blit horizontal
 	surfaces.position.x = (WINDOW_WIDTH - SIDEBAR_WIDTH + SIDEBAR_PADDING);
 	surfaces.position.y = (SIDEBAR_PADDING * 3);
 	SDL_BlitSurface(surfaces.horizontal, NULL, surfaces.screen, &surfaces.position);
 	
+	// Blit vertical
 	surfaces.position.x = (WINDOW_WIDTH - SIDEBAR_WIDTH + SIDEBAR_PADDING);
 	surfaces.position.y = (SIDEBAR_PADDING * 4);
 	SDL_BlitSurface(surfaces.vertical, NULL, surfaces.screen, &surfaces.position);
 	
+	// Blit exit
 	surfaces.position.x = (WINDOW_WIDTH - SIDEBAR_WIDTH + SIDEBAR_PADDING);
 	surfaces.position.y = (SIDEBAR_PADDING * 6);
 	SDL_BlitSurface(surfaces.found, NULL, surfaces.screen, &surfaces.position);
@@ -216,6 +250,11 @@ int manage_events(Surfaces surfaces) {
   
 }
 
+/*
+ * Ask the user a the end of the program
+ * 
+ * @return 1 to restart, 0 to quit
+ */
 int manage_controls(Surfaces surfaces) {
   
   int must_continue = 1;
@@ -223,14 +262,23 @@ int manage_controls(Surfaces surfaces) {
   SDL_WaitEvent(&surfaces.event);   
   if (surfaces.event.type == SDL_QUIT) must_continue = 0;  
   else if (surfaces.event.type == SDL_KEYDOWN) {
-    if (surfaces.event.key.keysym.sym == SDLK_ESCAPE) must_continue = 0;
-    else if (surfaces.event.key.keysym.sym == SDLK_UP) must_continue = 0;
+    if (surfaces.event.key.keysym.sym == SDLK_ESCAPE) {
+      must_continue = 0; 
+    }
+    else if (surfaces.event.key.keysym.sym == SDLK_KP1) {
+      must_continue = 1;
+    }
   }
   
   return must_continue;
   
 }
 
+/*
+ * Clean all resources at the end of the program
+ *
+ * @return void
+ */
 void house_keeping(Surfaces surfaces) {
 	
 	int i = 0;
@@ -241,6 +289,10 @@ void house_keeping(Surfaces surfaces) {
 	SDL_FreeSurface(surfaces.wall);
 	SDL_FreeSurface(surfaces.exit);
 	SDL_FreeSurface(surfaces.moves);
+	SDL_FreeSurface(surfaces.random);
+	SDL_FreeSurface(surfaces.horizontal);
+	SDL_FreeSurface(surfaces.vertical);
+	SDL_FreeSurface(surfaces.found);
 	
 	for (i = 0; i < 4; i++) {
 		SDL_FreeSurface(surfaces.bot[i]);

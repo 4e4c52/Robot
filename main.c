@@ -26,7 +26,7 @@ int main(int argc, char* argv[]) {
   
   printf("\nNow looking for an exit to escape this shit...\nWatch me through the window!\n");
   
-  int keep_running = 1;
+  int keep_running = 1, stay_in = 1;
   Surfaces surfaces;
   surfaces = load_surfaces();
   
@@ -35,9 +35,9 @@ int main(int argc, char* argv[]) {
     flush_robot_memory(bot);
     refresh_screen(map, bot, surfaces);
   
-    while (bot.out == 0 && keep_running == 1) {
+    while (bot.out == 0 && stay_in == 1) {
   	
-  	  keep_running = manage_events(surfaces);  
+  	  stay_in = manage_events(surfaces);  
       bot = move_robot(map, bot, exit);
   	  refresh_screen(map, bot, surfaces);
     

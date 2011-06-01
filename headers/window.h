@@ -20,7 +20,7 @@ struct Surfaces {
   SDL_Surface *vertical;
   SDL_Surface *horizontal;
   SDL_Surface *found;
-	TTF_Font *font;
+  TTF_Font *font;
   SDL_Rect position;
   SDL_Event event;
   

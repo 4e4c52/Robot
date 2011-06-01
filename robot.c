@@ -62,28 +62,24 @@ Robot move_robot(Map map, Robot bot, Exit exit) {
     map.map[bot.posY - bot.speed][bot.posX] != 'x' 
     && bot.m[bot.posY - bot.speed][bot.posX] != 1
     && !will_be_stuck(map, bot, TOP)
-    //&& !is_corridor(map, bot, TOP)
   ) { availableMoves[TOP] = 1; is_stuck = 0; }
   // Right
   if (
     map.map[bot.posY][bot.posX + bot.speed] != 'x'
     && bot.m[bot.posY][bot.posX + bot.speed] != 1
     && !will_be_stuck(map, bot, RIGHT)
-    //&& !is_corridor(map, bot, RIGHT)
   ) { availableMoves[RIGHT] = 1; is_stuck = 0; }
   // Bottom
   if (
     map.map[bot.posY + bot.speed][bot.posX] != 'x' 
     && bot.m[bot.posY + bot.speed][bot.posX] != 1
     && !will_be_stuck(map, bot, BOTTOM)
-    //&& !is_corridor(map, bot, BOTTOM)
   ) { availableMoves[BOTTOM] = 1; is_stuck = 0; }
   // Left
   if (
     map.map[bot.posY][bot.posX - bot.speed] != 'x'
     && bot.m[bot.posY][bot.posX - bot.speed] != 1
     && !will_be_stuck(map, bot, LEFT)
-    //&& !is_corridor(map, bot, LEFT)
   ) { availableMoves[LEFT] = 1; is_stuck = 0; }
   
   bot.is_stuck = is_stuck;
@@ -144,12 +140,9 @@ Robot move_robot(Map map, Robot bot, Exit exit) {
             map.map[bot.posY - bot.speed][bot.posX] != 'x' 
             && bot.m[bot.posY - bot.speed][bot.posX] != 1
             && !will_be_stuck(map, bot, TOP)
-            //&& !is_corridor(map, bot, TOP)
           ) { search = 0; bot.direction = TOP; }
           else if (
             map.map[bot.posY - bot.speed][bot.posX] != 'x' 
-            //&& !will_be_stuck(map, bot, TOP)
-            //&& !is_corridor(map, bot, TOP)
             && bot.is_stuck == 1
           ) { search = 0; bot.direction = TOP; }
           break;
@@ -158,12 +151,9 @@ Robot move_robot(Map map, Robot bot, Exit exit) {
             map.map[bot.posY][bot.posX + bot.speed] != 'x' 
             && bot.m[bot.posY][bot.posX + bot.speed] != 1
             && !will_be_stuck(map, bot, RIGHT)
-            //&& !is_corridor(map, bot, RIGHT)
           ) { search = 0; bot.direction = RIGHT; }
           else if (
             map.map[bot.posY][bot.posX + bot.speed] != 'x' 
-            //&& !will_be_stuck(map, bot, RIGHT)
-            //&& !is_corridor(map, bot, RIGHT)
             && bot.is_stuck == 1
           ) { search = 0; bot.direction = RIGHT; }
           break;
@@ -172,12 +162,9 @@ Robot move_robot(Map map, Robot bot, Exit exit) {
             map.map[bot.posY + bot.speed][bot.posX] != 'x' 
             && bot.m[bot.posY + bot.speed][bot.posX] != 1
             && !will_be_stuck(map, bot, BOTTOM)
-            //&& !is_corridor(map, bot, BOTTOM)
           ) { search = 0; bot.direction = BOTTOM; }
           else if (
             map.map[bot.posY + bot.speed][bot.posX] != 'x' 
-            //&& !will_be_stuck(map, bot, BOTTOM)
-            //&& !is_corridor(map, bot, BOTTOM)
             && bot.is_stuck == 1
           ) { search = 0; bot.direction = BOTTOM; }
           break;
@@ -186,12 +173,9 @@ Robot move_robot(Map map, Robot bot, Exit exit) {
             map.map[bot.posY][bot.posX - bot.speed] != 'x' 
             && bot.m[bot.posY][bot.posX - bot.speed] != 1
             && !will_be_stuck(map, bot, LEFT)
-            //&& !is_corridor(map, bot, LEFT)
           ) { search = 0; bot.direction = LEFT; }
           else if (
             map.map[bot.posY][bot.posX - bot.speed] != 'x' 
-            //&& !will_be_stuck(map, bot, LEFT)
-            //&& !is_corridor(map, bot, LEFT)
             && bot.is_stuck == 1
           ) { search = 0; bot.direction = LEFT; }
           break;

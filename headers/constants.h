@@ -11,7 +11,7 @@
 /* Robot constants */
 #define ROBOT_DEFAULT_X 1
 #define ROBOT_DEFAULT_Y 1
-#define ROBOT_MAX_RANDOM 4
+#define ROBOT_MAX_RANDOM 50
 
 enum Directions { TOP, RIGHT, BOTTOM, LEFT};
 typedef enum Directions Directions;
