@@ -1,6 +1,7 @@
 ## Robot project
 
 ### Config
+
 You can set some configuration directives in the file _headers/constants.h_ like:
 * Map blocks number
   * Width
@@ -14,6 +15,7 @@ You can set some configuration directives in the file _headers/constants.h_ like
   * Padding
   
 ### Moves
+
 The robot knows its position and the exit position.
 It doesn't know where the walls are located until it's in front of.
 The robot has a memory and knows where it has already walked.
